@@ -1,0 +1,45 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Watchlist</h2>
+    
+
+    {% for item in items %}
+
+  
+
+
+
+    <div class="container">
+      <div class="row mr-auto ">
+        
+        <div class="card col-xl-4 col-lg-6  m-5 t-4 b-4 l-4" style="width: 18rem;">
+          <img class="card-img-top" src="{{ item.wlisting_id.img_url}}" style="padding: 10px;" alt="Card image cap">
+          <div class="card-body">
+            <a href="{% url 'displayItem' id=item.wlisting_id.id %} ">
+              <h5 class="card-title">{{ item.wlisting_id.title}} </h5>
+            </a>
+            <p class="card-text">{{ item.wlisting_id.description}}</p>
+            
+            <a href="{% url 'removeFromWl' id=item.id  %} " class="btn btn-danger" role="button">Remove from Watchlist</a>
+     
+          
+            <p class="card-text"><small class="text-muted">Created on {{item.wlisting_id.ltime}} </small></p>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+
+
+
+
+
+    {% endfor %}
+
+
+
+
+
+
+{% endblock %}

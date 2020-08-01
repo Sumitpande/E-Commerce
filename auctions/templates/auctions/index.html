@@ -1,0 +1,44 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+
+  
+    
+
+
+    <div class="container">
+      <div class="row ">
+        {% for item in items %}
+        
+        <div  class="card col-xl-4 col-md-6  m-5 " style="width: 18rem;">
+          <img class="card-img-top" src="{{ item.img_url }}" style="padding: 10px;" alt="Card image cap">
+          <div class="card-body">
+            <a href="{% url 'displayItem' id=item.id %}">
+              <h5 class="card-title">{{ item.title }}</h5>
+            </a>
+            <h4 class="card-title">${{ item.price }} </h4>
+            <p class="card-text">{{ item.description}}</p>
+            {% if item.id in wids %}
+              
+              <h5>Added to Watchlist</h5>
+              
+            {% else %}
+              <a href="{% url 'addToWatchlist' id=item.id %}" class="btn btn-info" role="button">Add to Watchlist</a>
+              
+          
+            {% endif %}            
+           
+
+            <p class="card-text"><small class="text-muted">Created on {{item.ltime}} </small></p>
+          </div>
+        </div>
+       
+        {% endfor %}
+      </div>
+    </div>
+
+
+    
+
+{% endblock %}

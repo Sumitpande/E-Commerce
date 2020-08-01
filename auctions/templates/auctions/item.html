@@ -1,0 +1,235 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+{% block body %}
+
+    
+    <h2>{{item.title}}</h2>
+    {% if msg %}
+    <div class=" badge badge-secondary w-100" style="padding: 10px;margin-bottom: 10px;"> 
+      
+      <h1 class="text-center text-success" style="padding: 20px;" >Congratulations {{ winner }}<br>You have won the Auction</h1>
+      
+      
+    </div>
+    {% endif %}
+    
+
+    
+
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8">
+
+
+
+          <div class="card mb-3 " >
+            <img src="{{ item.img_url }} " class="card-img-top" style="height: 400px; width: 400px; padding: 10px;" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">{{ item.title }} </h5>
+              <p class="card-text"><small class="text-muted">Created on {{ item.ltime }}</small></p>
+              <p>Starting Price</p>
+              
+                <h4 class="card-title">${{ item.price }} </h4>
+              
+              
+              <p>Current Price</p>
+              {% if maxbid %}
+                <h4 class="card-title">${{ maxbid }} </h4>
+              {% else %}
+              <h4 class="card-title">${{ item.price }} </h4>
+              {% endif %}
+              
+    
+              
+              
+              {% if item.status == "active" %}
+              <form action="" method="POST">
+                {% csrf_token %}
+
+                
+                {{ form.bidding }}
+                
+                <input type="submit" class="btn bg-primary" value="Bid">
+                {% if ermsg %}
+                <p class="text-danger">Bid price should be greater than or equal to Starting price </p>
+                {% endif %}
+              </form>
+              
+              {% endif %}
+              <div class=" invalid-feedback">
+                Bid price must be greater than or equal to current price.
+              </div>
+              <h6>Details</h6>
+              <ul>
+                  <li>Listed by : {{ item.lister }} </li>
+                  <li>Category : {{ item.category }} </li>
+                  <li>Status : {{ item.status }} </li>
+                  <li>Description : {{ item.description }} </li>
+              </ul>
+         {% if item.status == "active" %}
+              {% if request.user == item.lister %}
+              <a href="{% url 'endBid' id=item.id %}  " class="btn btn-danger" role="button">End Bidding</a>
+    
+              {% endif %}
+              <h6>Current Bidders</h6>
+              {% if bidders %}
+              <ul>
+                {% for bidder in bidders %}
+                  {% if bidder.blisting_id.id == item.id %}
+    
+                    <li>${{bidder.bidding}} from {{ bidder.buyer_id.username }} </li>
+                  
+                  {% endif %}
+                {% endfor %}
+              </ul>
+
+              {% else %}
+              <p class="card-text"><small class="text-muted ">No Bidders Yet</small></p>
+
+              {% endif %}
+              
+              {% if wid %}
+              {% if not w %}
+              
+                <a href="{% url 'addToWatchlist' id=wid %}" class="btn btn-info" role="button">Add to Watchlist</a>
+              {% else %}
+                <a href="{% url 'removeFromWl' id=wid  %} " class="btn btn-danger" role="button">Remove from Watchlist</a>
+              
+              {% endif %}
+    
+              {% else %}
+    
+              {% if not w %}
+              
+                <a href="{% url 'addToWatchlist' id=item.id %}" class="btn btn-info" role="button">Add to Watchlist</a>
+              {% else %}
+                <a href="{% url 'removeFromWl' id=item.id  %} " class="btn btn-danger" role="button">Remove from Watchlist</a>
+              
+              {% endif %}
+    
+    
+              {% endif %}
+    
+        </div>
+      {% else %}
+      
+      {% if not msg %}
+      <h2 class="text-center text-success">Auction Won By {{ winner }} at $ {{ maxbid }} </h2>
+    
+      {% endif %}
+    
+      {% endif%}
+
+        </div>
+
+        </div>
+
+        {% if item.status == "active" %}
+        <div class="d-flex ">
+          <div class="ml-auto p-2">  
+            <form action="" method="post" >
+              {% csrf_token %}
+              <textarea class="form-control" name="Comment" id="exampleFormControlTextarea1" rows="4" placeholder="Add comments..."></textarea>
+              <br>
+              <input type="submit" class="btn btn-info" value="POST" style="float: right;" >
+            </form><br><br>
+        
+            <h4>Comments</h4>      
+            {% for c in cc%}
+            <div class="card" style="border-radius: 30px; border-top-left-radius: 0%;">
+              <h5 class="card-header">@{{ c.commenter }}</h5>
+              <div class="card-body">
+                
+                <p class="card-text">{{ c.Comment }}</p>
+                <p class="card-text"><small class="text-muted">Posted on {{c.ctime }} </small></p>
+              </div>
+            </div>
+            <br>
+            {% endfor %} 
+          </div>
+        {% endif %}
+
+
+
+
+
+
+      </div>
+
+
+        {% if item.status == "inactive" %}
+        <div class="d-flex ">
+          <div class="ml-auto p-2">  
+            <form action="" method="post" >
+              {% csrf_token %}
+              <textarea class="form-control" name="Comment" id="exampleFormControlTextarea1" rows="4" placeholder="Add comments..."></textarea>
+              <br>
+              <input type="submit" class="btn btn-info" value="POST" style="float: right;" >
+            </form><br><br>
+        
+            <h4>Comments</h4>      
+            {% for c in cc%}
+            <div class="card" style="border-radius: 30px; border-top-left-radius: 0%;">
+              <h5 class="card-header">@{{ c.commenter }}</h5>
+              <div class="card-body">
+                
+                <p class="card-text">{{ c.Comment }}</p>
+                <p class="card-text"><small class="text-muted">Posted on {{c.ctime }} </small></p>
+              </div>
+            </div>
+            <br>
+            {% endfor %} 
+          </div>
+        {% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    
+    
+
+      
+     
+  
+    
+
+
+
+
+
+
+    
+          
+
+
+     
+    
+
+
+
+
+{% endblock %}

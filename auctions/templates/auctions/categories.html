@@ -1,0 +1,23 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Categories</h2>
+
+   
+
+
+      <div class="container">
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 ">
+            {% for cat in cats %}
+            <div class="col bg-danger" style="height: 100px;margin-left: 10px;margin-bottom: 10px;">
+                <a href="{% url 'categories_view' cat=cat %} " class="">
+                    <h5 class="align-center text-dark ">{{cat}}</h5>
+                </a>
+                
+            </div>
+            {% endfor %}
+          </div>
+      </div>
+
+
+{% endblock %}
